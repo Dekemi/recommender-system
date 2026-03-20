@@ -118,6 +118,7 @@ similarity_df = pd.DataFrame(similarity, index=user_item.index, columns=user_ite
 # -----------------------------
 def precision_at_k(user, k=2):
 <<<<<<< HEAD
+<<<<<<< HEAD
     user_data = df[df["user"] == user]
     
     if len(user_data) < 2:
@@ -146,13 +147,39 @@ def precision_at_k(user, k=2):
     return 1.0 if test_item in top_k else 0.0
 =======
     recs = recommend(user, top_n=k).index
+=======
+    user_data = df[df["user"] == user]
+>>>>>>> e1c6608 (fixed evaluation logic)
     
-    actual = df[df["user"] == user]["product"].values
+    if len(user_data) < 2:
+        return 0.0
     
-    relevant = len(set(recs) & set(actual))
+    # Hide one product (simulate test)
+    test_item = user_data.sample(1)["product"].values[0]
     
+<<<<<<< HEAD
     return relevant / k
 >>>>>>> cb9d218 (fixed evaluation logic)
+=======
+    train_data = user_data[user_data["product"] != test_item]
+    
+    # Rebuild matrix WITHOUT test item
+    temp_df = df[~((df["user"] == user) & (df["product"] == test_item))]
+    
+    user_item_temp = temp_df.pivot_table(index="user", columns="product", values="rating").fillna(0)
+    
+    similarity_temp = cosine_similarity(user_item_temp)
+    similarity_df_temp = pd.DataFrame(similarity_temp, index=user_item_temp.index, columns=user_item_temp.index)
+    
+    # Recommend
+    similar_users = similarity_df_temp[user].sort_values(ascending=False)[1:]
+    scores = np.dot(similar_users.values, user_item_temp.loc[similar_users.index])
+    recs = pd.Series(scores, index=user_item_temp.columns).sort_values(ascending=False)
+    
+    top_k = recs.head(k).index
+    
+    return 1.0 if test_item in top_k else 0.0
+>>>>>>> e1c6608 (fixed evaluation logic)
 
 def recommend(user, top_n=2):
     similar_users = similarity_df[user].sort_values(ascending=False)[1:]
