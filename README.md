@@ -2,7 +2,7 @@
 
 ## 🔗 Live Demo
 
-👉 (Add your Hugging Face link here after deployment)
+👉 https://huggingface.co/spaces/dekemi/Recommender-App
 
 ---
 
@@ -48,11 +48,6 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
----
-
-## 📸 Demo
-
-(Add screenshot later if you want)
 
 ---
 
